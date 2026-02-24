@@ -55,6 +55,9 @@ app.get("/get/:id", async (req, res) => {
   }
 });
 
+// ========================
+// SEARCH WITH PAGINATION
+// ========================
 app.get("/search", async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
@@ -64,7 +67,7 @@ app.get("/search", async (req, res) => {
     const from = (page - 1) * pageSize;
 
     const result = await client.search({
-      index: "app_contents",
+      index: indexName,
       from: from,
       size: pageSize,
       query: {
@@ -72,8 +75,10 @@ app.get("/search", async (req, res) => {
           must: appName
             ? [{ match: { app: appName } }]
             : [{ match_all: {} }],
-          filter: [
-            { term: { deleted_at: null } }
+          must_not: [
+            {
+              exists: { field: "deleted_at" }
+            }
           ]
         }
       },
@@ -82,19 +87,28 @@ app.get("/search", async (req, res) => {
       ]
     });
 
+    const total = result.hits?.total?.value || 0;
+    const hits = result.hits?.hits || [];
+
     res.json({
-      total: result.hits.total.value,
-      page: page,
-      pageSize: pageSize,
-      totalPages: Math.ceil(result.hits.total.value / pageSize),
-      data: result.hits.hits.map(x => x._source)
+      success: true,
+      total,
+      page,
+      pageSize,
+      totalPages: Math.ceil(total / pageSize),
+      data: hits.map(x => x._source)
     });
 
   } catch (err) {
-    console.error(err);
+    console.error("SEARCH ERROR:", err);
     res.status(500).json({ error: err.message });
   }
 });
-app.listen(3000, () => {
+
+
+// ========================
+// START SERVER
+// ========================
+app.listen(3000, "0.0.0.0", () => {
   console.log("Server running on port 3000");
 });
