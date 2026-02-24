@@ -11,7 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@elastic/elasticsearch": "^9.3.2",
+    "@elastic/elasticsearch": "^8.19.1",
     "body-parser": "^2.2.2",
     "express": "^5.2.1"
   }
