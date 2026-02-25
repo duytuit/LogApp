@@ -7,8 +7,8 @@ app.use(express.json());
 const client = new Client({
   node: "https://103.69.188.102:9292",
   auth: {
-    username: "elastic",
-    password: "1d7QDNUDTp46AP2kV10h"
+    username: "kibana_system",
+    password: "-LtBr4w0_3SYcOP68FNa"
   },
   tls: {
     rejectUnauthorized: false
