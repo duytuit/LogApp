@@ -8,7 +8,7 @@ const client = new Client({
   node: "https://103.69.188.102:9292",
   auth: {
     username: "elastic",
-    password: "g8*6DY9+9uEi14pWKpV2"
+    password: "1d7QDNUDTp46AP2kV10h"
   },
   tls: {
     rejectUnauthorized: false
